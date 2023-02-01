@@ -16,13 +16,21 @@ def get_response(username):
         FROM users \
         WHERE (username = '{username}');"
     userfound = engine.execute(sql_code2)
-    userans = userfound.fetchone()[0]
+    
     #st.success('User Updated')  
-    userfound.close()
+    
 
-    if userans:      
-        return userans #[0]
+    if userfound is not None:
+        #st.success(userfound)
+        try:
+            userans = userfound.fetchone()[0]   
+            userfound.close() 
+            return userans #[0]
+        except:
+            userfound.close() 
+            return None #userans #[0]
     else:
+        userfound.close()
         return None
 
 def set_access(username):
@@ -31,8 +39,14 @@ def set_access(username):
         SET accessed =1 \
         WHERE (username = '{username}');"
     UserUpdated = engine.execute(sql_code3)
-    st.success('User Updated')  
     UserUpdated.close()
+    #st.success('User Updated') 
+
+    if UserUpdated:
+        return "User Updated"
+    else:
+        return None
+    
 
 
 def main():
